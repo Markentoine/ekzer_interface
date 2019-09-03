@@ -1,0 +1,15 @@
+<section class="phx-hero">
+  <h1><%= gettext "%{name}", name: "EKZER" %></h1>
+  <p>Interagir avec la base de données d'exercices</p>
+</section>
+
+<section class="row">
+ <p>
+ <%= form_tag("/add") do
+ [tag(:input, type: "submit", value: "AJOUTER" )]
+ end%>
+ <%= form_tag("/find") do
+ [tag(:input, type: "submit", value: "RECHERCHER")]
+ end%>
+ </p>
+</section>

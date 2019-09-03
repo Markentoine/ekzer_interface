@@ -1,0 +1,16 @@
+<h1>Nouvel exercice de type: <%= @type %></h1>
+<%= form_for @conn, Routes.exercice_path(@conn, :specific_infos), fn f ->%>
+    <%= label f, :level, "Niveau"%>
+    <%= text_input f, :level, placeholder: "Indiquez le niveau en chiffre"%>
+    <%= label f, :progression, "Progression"%>
+    <%= text_input f, :progression, placeholder: "Indiquez la progression en chiffre"%>
+    <%= label f, :field, "Domaine"%>
+    <%= select f, :field, options: ["grammaire", "vocabulaire", "orthographe", "conjugaison"]%>
+    <%= label f, :objectives, "Objectifs"%>
+    <%= select f, :objectives, options: ["Repérer le sujet"]%>
+    <%= label f, :keywords, "Mots-clefs"%>
+    <%= text_input f, :keywords, placeholder: "Insérez des mots clefs séparés par des espaces" %>
+    <%= label f, :consigne, "Consigne"%>
+    <%= text_input f, :consigne, placeholder: "Insérez la consigne de l'exercice"%>
+    <%= submit "Valider les informations"%>
+<% end %>
