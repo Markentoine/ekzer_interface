@@ -23,12 +23,10 @@ defmodule EkzerInterfaceWeb.ExerciceController do
   def specific_infos(conn, %{"level" => level, "progression" => progression, "field" => field, "consigne" => consigne} = params) do
     exercise_pid = get_session(conn, :current_exercise)
     {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
-    {:ok, specific_fields} = EkzerAdd.get_exercise_value(exercise_pid, :specific_fields)
-    specific_fields_keys = Map.keys(specific_fields)
     cond do 
       correct_basic_infos?(level, progression, field) ->
         {:ok, :success} = EkzerAdd.add_common_infos(exercise_pid, params)
-        display_specific_infos(conn, type, specific_fields_keys)
+        display_specific_infos(conn, type)
       true -> conn |> put_flash(:error, "Certaines informations sont erronées ou manquantes.") |> redirect(to: "/add/new_exercice/basic_infos")
     end
   end
@@ -39,20 +37,20 @@ defmodule EkzerInterfaceWeb.ExerciceController do
 
   #PRIVATE
 
-  defp display_specific_infos(conn, :classer = type, specific_fields_keys) do
-    render(conn, "classer_infos.html", %{type: type, keys: specific_fields_keys})
+  defp display_specific_infos(conn, :classer = type) do
+    render(conn, "classer_infos.html", %{type: type, colonnes: ["colonne 1", "colonne 2", "colonne 3"]})
   end
-  defp display_specific_infos(conn, :quizz = type, specific_fields_keys) do
-    render(conn, "quizz_infos.html", %{type: type, keys: specific_fields_keys})
+  defp display_specific_infos(conn, :quizz = type) do
+    render(conn, "quizz_infos.html", %{type: type})
   end
-  defp display_specific_infos(conn, :associer = type, specific_fields_keys) do
-    render(conn, "associer_infos.html", %{type: type, keys: specific_fields_keys})
+  defp display_specific_infos(conn, :associer = type) do
+    render(conn, "associer_infos.html", %{type: type})
   end
-  defp display_specific_infos(conn, :prelever = type, specific_fields_keys) do
-    render(conn, "prelever_infos.html", %{type: type, keys: specific_fields_keys})
+  defp display_specific_infos(conn, :prelever = type) do
+    render(conn, "prelever_infos.html", %{type: type})
   end
-  defp display_specific_infos(conn, :completer = type, specific_fields_keys) do
-    render(conn, "completer_infos.html", %{type: type, keys: specific_fields_keys})
+  defp display_specific_infos(conn, :completer = type) do
+    render(conn, "completer_infos.html", %{type: type})
   end
 
   defp correct_basic_infos?(level, progression, field) do

@@ -13,7 +13,14 @@ defmodule EkzerInterfaceWeb.ExerciceCommander do
   # def page_loaded(socket) do
   #   set_prop socket, "div.jumbotron h2", innerText: "This page has been drabbed"
   # end
-  defhandler changed_nb_col() do
-    
+  defhandler changed_nb_col(socket, sender) do
+    nb_col = sender["value"]
+    put_store(socket, :nb_col, nb_col)
+  end
+
+  defhandler create_cols(socket, sender) do
+    nb_col = String.to_integer(get_store(socket, :nb_col))
+    colonnes = Enum.map(1..nb_col, fn nb -> "colonne #{nb}" end)
+    Drab.Live.poke socket, colonnes: colonnes
   end
 end
