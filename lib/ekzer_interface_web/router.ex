@@ -33,6 +33,7 @@ defmodule EkzerInterfaceWeb.Router do
 
     get "/error_basic_infos", ExerciceController, :error_basic_infos
     post "/specific_infos", ExerciceController, :specific_infos
+    post "/validate_exercise", ExerciceController, :validate_exercise
   end
 
 end

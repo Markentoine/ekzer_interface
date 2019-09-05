@@ -31,6 +31,11 @@ defmodule EkzerInterfaceWeb.ExerciceController do
     end
   end
 
+  def validate_exercise(conn, params) do
+    IO.inspect params
+    render(conn, "validate_exercise.html")
+  end
+
   def error_basic_infos(conn, type) do
     render(conn, "new_exercice.html", type: type)
   end
