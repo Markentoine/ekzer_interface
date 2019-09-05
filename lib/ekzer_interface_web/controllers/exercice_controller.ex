@@ -27,7 +27,7 @@ defmodule EkzerInterfaceWeb.ExerciceController do
     EkzerAdd.add_common_infos(exercise_pid, params)
     cond do 
       correct_basic_infos?(level, progression, field) -> render(conn, "specific_infos.html", type: type)
-      true -> conn |> put_flash(:error, "Certaines informations sont erronées.") |> redirect(to: "/add/new_exercice/basic_infos")
+      true -> conn |> put_flash(:error, "Certaines informations sont erronées ou manquantes.") |> redirect(to: "/add/new_exercice/basic_infos")
     end
   end
 
