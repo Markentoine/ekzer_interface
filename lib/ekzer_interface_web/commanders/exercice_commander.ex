@@ -13,4 +13,7 @@ defmodule EkzerInterfaceWeb.ExerciceCommander do
   # def page_loaded(socket) do
   #   set_prop socket, "div.jumbotron h2", innerText: "This page has been drabbed"
   # end
+  defhandler changed_nb_col() do
+    
+  end
 end

@@ -1,6 +1,0 @@
-<h1>Exercice de type <%= @type %></h1>
-<ul>
-    <%= for key <- @keys do %>
-    <li><%= Atom.to_string(key) %></li>
-    <% end %>
-</ul>

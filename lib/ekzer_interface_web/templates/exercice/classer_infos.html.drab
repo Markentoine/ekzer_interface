@@ -1,0 +1,4 @@
+<h1>Exercice de type <%= @type %></h1>
+<label for="nb_col">Nombre de colonnes</label>
+<input drab-keyup="changed_nb_col" type="text" name="nb_col" placeholder="Entrez un chiffre">
+<button id="valid_col" class="button">Valider</button>
