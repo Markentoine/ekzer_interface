@@ -6,8 +6,12 @@ defmodule EkzerInterfaceWeb.ExerciceController do
     conn = put_session(conn, :current_exercise, exercise_pid)
     adder_pid = get_session(conn, :adder_pid)
     EkzerAdd.register_exercise(adder_pid, exercise_pid)
-    {:ok, exercise_entries} = EkzerAdd.fetch_entries(exercise_pid)
-    render(conn, "new_exercice.html", %{type: type, entries: exercise_entries})
+    render(conn, "new_exercice.html", type: type)
+  end
+  
+  def new_exercice(conn, %{}) do
+    {:ok, type} = EkzerAdd.get_exercise_value(get_session(conn, :current_exercise), :type)
+    render(conn, "new_exercice.html", type: type)
   end
 
   def summary(conn, _params) do
@@ -16,12 +20,19 @@ defmodule EkzerInterfaceWeb.ExerciceController do
     render(conn, "summary.html")
   end
 
-  def basic_infos(conn, %{"level" => level, "progression" => progression, "field" => field, "consigne" => consigne}) do
-    {:ok, type} = EkzerAdd.get_exercise_value(get_session(conn, :current_exercise), :type)
+  def specific_infos(conn, %{"level" => level, "progression" => progression, "field" => field, "consigne" => consigne} = params) do
+    exercise_pid = get_session(conn, :current_exercise)
+    {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
+    {:ok, :success} =EkzerAdd.add_common_infos(exercise_pid, params)
+    EkzerAdd.add_common_infos(exercise_pid, params)
     cond do 
-      correct_basic_infos?(level, progression, field) -> render(conn, "specific_infos.html")
-      true -> render(conn, "new_exercice.html", type: type)
+      correct_basic_infos?(level, progression, field) -> render(conn, "specific_infos.html", type: type)
+      true -> conn |> put_flash(:error, "Certaines informations sont erronées.") |> redirect(to: "/add/new_exercice/basic_infos")
     end
+  end
+
+  def error_basic_infos(conn, type) do
+    render(conn, "new_exercice.html", type: type)
   end
 
   #PRIVATE

@@ -23,6 +23,7 @@ defmodule EkzerInterfaceWeb.Router do
   scope "/add", EkzerInterfaceWeb do
     pipe_through :browser
     
+    get "/new_exercice/basic_infos", ExerciceController, :new_exercice
     post "/new_exercice/basic_infos", ExerciceController, :new_exercice
     post "/summary", ExerciceController, :summary
   end
@@ -30,6 +31,7 @@ defmodule EkzerInterfaceWeb.Router do
   scope "/add/new_exercice", EkzerInterfaceWeb do
     pipe_through :browser
 
+    get "/error_basic_infos", ExerciceController, :error_basic_infos
     post "/specific_infos", ExerciceController, :specific_infos
   end
 
