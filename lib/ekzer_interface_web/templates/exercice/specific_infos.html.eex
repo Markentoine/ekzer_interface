@@ -1,0 +1,1 @@
+<h1>Infos spécifique au type d'exercice <%= @type %></h1>
