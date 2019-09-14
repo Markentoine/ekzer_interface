@@ -24,9 +24,6 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "consigne.html")
   end
 
-
-
-  
   def specific_infos(conn, %{"level" => level, "progression" => progression, "field" => field, "consigne" => consigne} = params) do
     exercise_pid = get_session(conn, :current_exercise)
     {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
