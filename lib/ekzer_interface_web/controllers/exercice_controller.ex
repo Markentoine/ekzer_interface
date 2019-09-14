@@ -37,6 +37,9 @@ defmodule EkzerInterfaceWeb.ExerciceController do
       cols = Enum.filter(Map.keys(params), fn p -> Regex.match?(~r/colonne/, p) end)
       |> Enum.reduce(%{}, fn col, acc -> Map.put(acc, col, String.split(params[col])) end)
       {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, type, cols)
+      {:ok, specific} = EkzerAdd.get_state(exercise_pid)
+      IO.puts "specific"
+      IO.inspect specific
       render(conn, "validate_exercise.html")
   end
 
