@@ -14,12 +14,19 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "new_exercise.html", type: type)
   end
 
-  def summary(conn, _params) do
-    pids = get_session(conn, :adder_pid)
-    |> EkzerAdd.fetch_exercises_pids()
-    render(conn, "summary.html")
+  def exercise_objectives(conn, _params) do
+    render(conn, "objectives.html")
+  end
+  def exercise_keywords(conn, _params) do
+    render(conn, "keywords.html")
+  end
+  def exercise_consigne(conn, _params) do
+    render(conn, "consigne.html")
   end
 
+
+
+  
   def specific_infos(conn, %{"level" => level, "progression" => progression, "field" => field, "consigne" => consigne} = params) do
     exercise_pid = get_session(conn, :current_exercise)
     {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
@@ -31,6 +38,12 @@ defmodule EkzerInterfaceWeb.ExerciseController do
       end
     end
     
+    def summary(conn, _params) do
+      pids = get_session(conn, :adder_pid)
+      |> EkzerAdd.fetch_exercises_pids()
+      render(conn, "summary.html")
+    end
+
     def validate_exercise(conn, params) do
       exercise_pid = get_session(conn, :current_exercise)
       {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)

@@ -24,6 +24,9 @@ defmodule EkzerInterfaceWeb.Router do
     pipe_through :browser
 
     get "/new_exercise/basic_infos", ExerciseController, :new_exercise
+    post "/new_exercise/objectives", ExerciseController, :exercise_objectives
+    post "/new_exercise/keywords", ExerciseController, :exercise_keywords
+    post "/new_exercise/consigne", ExerciseController, :exercise_consigne
     post "/new_exercise/basic_infos", ExerciseController, :new_exercise
     post "/summary", ExerciseController, :summary
   end

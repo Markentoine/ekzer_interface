@@ -1,6 +1,6 @@
 <h1>Situer l'exercice</h1>
 <p>Type d'exercice: <%= @type %></p>
-<%= form_for @conn, Routes.exercise_path(@conn, :specific_infos), fn f ->%>
+<%= form_for @conn, Routes.exercise_path(@conn, :exercise_objectives), fn f ->%>
     <%= label f, :field, "Domaine"%>
     <%= select f, :field, options: ["grammaire", "vocabulaire", "orthographe", "conjugaison"]%>
     <%= label f, :level, "Niveau"%>

@@ -1,0 +1,6 @@
+<h1>Mots-Clefs associés à cet exercice</h1>
+<%= form_for @conn, Routes.exercise_path(@conn, :exercise_consigne), fn f ->%>
+    <%= label f, :keywords, "Mots-clefs"%>
+    <%= text_input f, :keywords, placeholder: "Insérez des mots clefs séparés par des espaces" %>
+    <%= submit "Valider les informations"%>
+<% end %>
