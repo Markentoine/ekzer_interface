@@ -1,12 +1,12 @@
-<h1>Informations générales</h1>
+<h1>Situer l'exercice</h1>
 <p>Type d'exercice: <%= @type %></p>
-<%= form_for @conn, Routes.exercice_path(@conn, :specific_infos), fn f ->%>
+<%= form_for @conn, Routes.exercise_path(@conn, :specific_infos), fn f ->%>
+    <%= label f, :field, "Domaine"%>
+    <%= select f, :field, options: ["grammaire", "vocabulaire", "orthographe", "conjugaison"]%>
     <%= label f, :level, "Niveau"%>
     <%= text_input f, :level, placeholder: "Indiquez le niveau en chiffre"%>
     <%= label f, :progression, "Progression"%>
     <%= text_input f, :progression, placeholder: "Indiquez la progression en chiffre"%>
-    <%= label f, :field, "Domaine"%>
-    <%= select f, :field, options: ["grammaire", "vocabulaire", "orthographe", "conjugaison"]%>
     <%= label f, :objectives, "Objectifs"%>
     <%= select f, :objectives, options: ["Repérer le sujet"]%>
     <%= label f, :keywords, "Mots-clefs"%>

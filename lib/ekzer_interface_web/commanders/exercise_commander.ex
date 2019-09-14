@@ -1,4 +1,4 @@
-defmodule EkzerInterfaceWeb.ExerciceCommander do
+defmodule EkzerInterfaceWeb.ExerciseCommander do
   use Drab.Commander
   # Place your event handlers here
   #

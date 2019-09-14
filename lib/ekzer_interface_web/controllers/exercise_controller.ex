@@ -1,4 +1,4 @@
-defmodule EkzerInterfaceWeb.ExerciceController do
+defmodule EkzerInterfaceWeb.ExerciseController do
   use EkzerInterfaceWeb, :controller
 
   def new_exercice(conn, %{"exercice" => %{"type" => type}}) do
@@ -9,9 +9,9 @@ defmodule EkzerInterfaceWeb.ExerciceController do
     render(conn, "new_exercice.html", type: type)
   end
   
-  def new_exercice(conn, %{}) do
+  def new_exercise(conn, %{}) do
     {:ok, type} = EkzerAdd.get_exercise_value(get_session(conn, :current_exercise), :type)
-    render(conn, "new_exercice.html", type: type)
+    render(conn, "new_exercise.html", type: type)
   end
 
   def summary(conn, _params) do
@@ -37,10 +37,8 @@ defmodule EkzerInterfaceWeb.ExerciceController do
       cols = Enum.filter(Map.keys(params), fn p -> Regex.match?(~r/colonne/, p) end)
       |> Enum.reduce(%{}, fn col, acc -> Map.put(acc, col, String.split(params[col])) end)
       {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, type, cols)
-      {:ok, specific} = EkzerAdd.get_state(exercise_pid)
-      IO.puts "specific"
-      IO.inspect specific
-      render(conn, "validate_exercise.html")
+      {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
+      render(conn, "validate_exercise.html", exercise: exercise)
   end
 
   def error_basic_infos(conn, type) do
