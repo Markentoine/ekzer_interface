@@ -20,7 +20,7 @@ defmodule EkzerInterfaceWeb.ExerciceCommander do
 
   defhandler create_cols(socket, sender) do
     nb_col = String.to_integer(get_store(socket, :nb_col))
-    colonnes = Enum.map(1..nb_col, fn nb -> "colonne #{nb}" end)
-    Drab.Live.poke socket, colonnes: colonnes
+    colonnes = Enum.map(1..nb_col, fn nb -> "colonne_#{nb}" end)
+    Drab.Live.poke(socket, colonnes: colonnes)
   end
 end

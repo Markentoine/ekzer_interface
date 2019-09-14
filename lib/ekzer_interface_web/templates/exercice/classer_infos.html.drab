@@ -1,7 +1,9 @@
 <h1>Exercice de type <%= @type %></h1>
-<label for="nb_col">Nombre de colonnes</label>
+
+<label for="nb_col">Vous pouvez changer le nombre de colonnes:</label>
 <input drab-keyup="changed_nb_col" drab_options="debounce(500)" type="text" name="nb_col" placeholder="Entrez un chiffre">
 <button drab-click="create_cols" id="choisir_nb_col" class="button">Choisir</button>
+
 <%= form_for @conn, Routes.exercice_path(@conn, :validate_exercise), fn f -> %>
 <%= for col <- @colonnes do %>
     <label for=<%= col %>><%= col %></label>

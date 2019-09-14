@@ -1,5 +1,4 @@
 defmodule EkzerInterface.Application do
-
   use Application
 
   def start(_type, _args) do

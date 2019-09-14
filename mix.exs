@@ -40,7 +40,7 @@ defmodule EkzerInterface.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:ekzer_add, path: "../ekzer_add"},
-      {:drab, "~> 0.10.0"},
+      {:drab, "~> 0.10.0"}
     ]
   end
 end

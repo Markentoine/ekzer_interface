@@ -19,10 +19,10 @@ defmodule EkzerInterfaceWeb.Router do
     get "/", PageController, :index
     post "/add", PageController, :add
   end
-  
+
   scope "/add", EkzerInterfaceWeb do
     pipe_through :browser
-    
+
     get "/new_exercice/basic_infos", ExerciceController, :new_exercice
     post "/new_exercice/basic_infos", ExerciceController, :new_exercice
     post "/summary", ExerciceController, :summary
@@ -35,5 +35,4 @@ defmodule EkzerInterfaceWeb.Router do
     post "/specific_infos", ExerciceController, :specific_infos
     post "/validate_exercise", ExerciceController, :validate_exercise
   end
-
 end
