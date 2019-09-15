@@ -1,5 +1,5 @@
 <h1>Consigne de l'exercice</h1>
-<%= form_for @conn, Routes.exercise_path(@conn, :validate_exercise), fn f ->%>
+<%= form_for @conn, Routes.exercise_path(@conn, :exercise_consigne), fn f ->%>
     <%= label f, :consigne, "Consigne"%>
     <%= text_input f, :consigne, placeholder: "Insérez la consigne de l'exercice"%>
     <%= submit "Valider les informations"%>

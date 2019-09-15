@@ -1,6 +1,6 @@
 <h1>Ajouter un exercice</h1>
 <% types = ["completer", "associer", "prelever", "classer", "quizz"] %>
-<%= form_for @conn, Routes.exercise_path(@conn, :new_exercise), fn f -> %>
+<%= form_for @conn, Routes.exercise_path(@conn, :exercise_type), fn f -> %>
   <%= label f, :options, "Quel est le type d'exercice que vous souhaitez ajouter?" %>
   <%= for type <- types do %>
         <%= label do %>

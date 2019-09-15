@@ -8,6 +8,6 @@ defmodule EkzerInterfaceWeb.PageController do
   def add(conn, _params) do
     {:ok, adder_pid} = EkzerAdd.add()
     conn = put_session(conn, :adder_pid, adder_pid)
-    render(conn, "add.html")
+    render(conn, "exercise_type.html")
   end
 end

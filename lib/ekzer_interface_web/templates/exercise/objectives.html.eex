@@ -1,5 +1,5 @@
 <h1>Objectifs de l'exercice</h1>
-<%= form_for @conn, Routes.exercise_path(@conn, :exercise_keywords), fn f ->%>
+<%= form_for @conn, Routes.exercise_path(@conn, :exercise_objectives), fn f ->%>
     <%= label f, :objectives, "Objectifs"%>
     <%= select f, :objectives, options: ["Repérer le sujet"]%>
     <%= submit "Valider les informations"%>
