@@ -1,4 +1,4 @@
-<h1>Exercice de type <%= @type %></h1>
+<h1>Exercice de type "<%= @type %>"</h1>
 
 <label for="nb_col">Vous pouvez changer le nombre de colonnes:</label>
 <input drab-keyup="changed_nb_col" drab_options="debounce(500)" type="text" name="nb_col" placeholder="Entrez un chiffre">

@@ -1,12 +1,12 @@
 defmodule EkzerInterfaceWeb.ExerciseController do
   use EkzerInterfaceWeb, :controller
 
-  def exercise_type(conn, %{"type"=> type}) do
+  def exercise_type(conn, %{"type" => type}) do
     {:ok, exercise_pid} = EkzerAdd.new_exercise(String.to_atom(type))
-    conn = put_session(conn, :current_exercise, exercise_pid)
-    adder_pid = get_session(conn, :adder_pid)
+    new_conn = put_session(conn, :current_exercise, exercise_pid)
+    adder_pid = get_session(new_conn, :adder_pid)
     EkzerAdd.register_exercise(adder_pid, exercise_pid)
-    render(conn, "exercise_situation.html", type: type)
+    render(new_conn, "exercise_situation.html", type: type)
   end
 
   def exercise_type(conn, %{}) do
@@ -14,44 +14,44 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "exercise_situation.html", type: type)
   end
 
-  def exercise_situation(conn, _params) do
-    render(conn, "objectives.html")
-  end
-
-  def exercise_objectives(conn, _params) do
-    render(conn, "keywords.html")
-  end
-
-  def exercise_keywords(conn, _params) do
-    render(conn, "consigne.html")
-  end
-
-  def exercise_consigne(conn, _params) do
-    render(conn, "validate_exercise.html")
-  end
-
-  def specific_infos(
-        conn,
-        %{
-          "level" => level,
-          "progression" => progression,
-          "field" => field,
-          "consigne" => consigne
-        } = params
-      ) do
-    exercise_pid = get_session(conn, :current_exercise)
-    {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
-
+  def exercise_situation(conn, %{ "level" => level, "progression" => progression, "field" => field}) do
     cond do
       correct_basic_infos?(level, progression, field) ->
-        {:ok, :success} = EkzerAdd.add_common_infos(exercise_pid, params)
-        display_specific_infos(conn, type)
-
-      true ->
         conn
-        |> put_flash(:error, "Certaines informations sont erronées ou manquantes.")
-        |> redirect(to: "/add/new_exercice/basic_infos")
+        |> register_infos(%{ "level" => String.to_integer(level),
+                            "progression" => String.to_integer(progression),
+                            "field" => field,
+                          })
+        |> render("objectives.html")
+        true ->
+          conn
+          |> put_flash(:error, "Certaines informations sont erronées ou manquantes.")
+          |> redirect(to: "/add/new_exercice/situation")
     end
+  end
+      
+  def exercise_objectives(conn, %{"objectives" => objectives}) do
+    conn
+    |> register_infos(%{ "objectives" => [objectives]})
+    |> render("keywords.html")
+  end
+
+  def exercise_keywords(conn, %{"keywords" => keywords}) do
+    conn
+    |> register_infos(%{ "keywords" => String.split(keywords)})
+    |> render("consigne.html")
+  end
+
+  def exercise_consigne(conn, %{"consigne" => consigne} = _params) do
+    conn
+    |> register_infos(%{ "consigne" => consigne})
+    |> specific_infos(_params)
+  end
+
+  def specific_infos(conn, _params) do
+    exercise_pid = get_session(conn, :current_exercise)
+    {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
+    display_specific_infos(conn, type)
   end
 
   def summary(conn, _params) do
@@ -108,11 +108,18 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     is_number?(level) and is_number?(progression) and field_in_list(field)
   end
 
+  defp field_in_list(field) do
+    field in ["grammaire", "vocabulaire", "orthographe", "conjugaison"]
+  end
+
   defp is_number?(v) do
     Regex.match?(~r/\d+/, v)
   end
 
-  defp field_in_list(field) do
-    field in ["grammaire", "vocabulaire", "orthographe", "conjugaison"]
+  defp register_infos(conn, infos) do
+    exercise_pid = get_session(conn, :current_exercise)
+    {:ok, :success} = EkzerAdd.add_common_infos(exercise_pid, infos)
+    conn
   end
+
 end

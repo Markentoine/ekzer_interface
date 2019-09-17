@@ -17,25 +17,26 @@ defmodule EkzerInterfaceWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    post "/add", PageController, :add
-  end
-
-  scope "/add", EkzerInterfaceWeb do
-    pipe_through :browser
-
-    get "/new_exercise/type", ExerciseController, :exercise_type
-    post "/new_exercise/type", ExerciseController, :exercise_type
-    post "/new_exercise/situation", ExerciseController, :exercise_situation
-    post "/new_exercise/objectives", ExerciseController, :exercise_objectives
-    post "/new_exercise/keywords", ExerciseController, :exercise_keywords
-    post "/new_exercise/consigne", ExerciseController, :exercise_consigne
-    post "/summary", ExerciseController, :summary
+    post "/add/new_exercise/type", PageController, :add
   end
 
   scope "/add/new_exercise", EkzerInterfaceWeb do
     pipe_through :browser
 
+    post "/situation", ExerciseController, :exercise_type
+    post "/objectives", ExerciseController, :exercise_situation
+    post "/keywords", ExerciseController, :exercise_objectives
+    post "/consigne", ExerciseController, :exercise_keywords
+    post "/specific_infos", ExerciseController, :exercise_consigne
+    post "/validation", ExerciceController, :validate_exercise
+
+  end
+
+  scope "/add", EkzerInterfaceWeb do
+    pipe_through :browser
+
     get "/error_basic_infos", ExerciseController, :error_basic_infos
+    post "/summary", ExerciseController, :summary
     post "/specific_infos", ExerciseController, :specific_infos
     post "/validate_exercise", ExerciseController, :validate_exercise
   end

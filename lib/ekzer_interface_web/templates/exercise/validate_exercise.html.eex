@@ -1,10 +1,10 @@
-<h1>Exercice validé</h1>
+<h1>Résumé de l'exercice</h1>
 <ul>
     <li>Type: <%= @exercise.type %></li>
-    <li>Niveau: <%= @exercise.common_fields["level"] %></li>
-    <li>Progression: <%= @exercise.common_fields["progression"] %></li>
-    <li>Domaine: <%= @exercise.common_fields["field"] %></li>
-    <li>Consigne: <%= @exercise.common_fields["consigne"] %></li>
-    <li>Objectifs: <%= @exercise.common_fields["objectives"] %></li>
-    <li>Mots-Clefs: <%= @exercise.common_fields["keywords"] %></li>
+    <li>Niveau: <%= @exercise.common_fields.level %></li>
+    <li>Progression: <%= @exercise.common_fields.progression %></li>
+    <li>Domaine: <%= @exercise.common_fields.field %></li>
+    <li>Consigne: <%= @exercise.common_fields.consigne %></li>
+    <li>Objectifs: <%= Enum.join(@exercise.common_fields.objectives, " ; ") %></li>
+    <li>Mots-Clefs: <%= Enum.join(@exercise.common_fields.keywords, " ; ") %></li>
 </ul>
