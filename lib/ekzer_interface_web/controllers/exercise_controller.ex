@@ -26,7 +26,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
         true ->
           conn
           |> put_flash(:error, "Certaines informations sont erronées ou manquantes.")
-          |> redirect(to: "/add/new_exercice/situation")
+          |> redirect(to: "/add/new_exercise/situation")
     end
   end
       
@@ -55,14 +55,14 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   def summary(conn, _params) do
-    pids =
+    _pids =
       get_session(conn, :adder_pid)
       |> EkzerAdd.fetch_exercises_pids()
 
     render(conn, "summary.html")
   end
 
-  def validate_exercise(conn, params) do
+  def validate_classer(conn, params) do
     exercise_pid = get_session(conn, :current_exercise)
     {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
 
@@ -73,6 +73,10 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, type, cols)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     render(conn, "validate_exercise.html", exercise: exercise)
+  end
+  
+  def validate_quizz(conn, _params ) do
+    render(conn, "validate_exercise.html", exercise: %{})
   end
 
   def error_basic_infos(conn, type) do
@@ -89,7 +93,10 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   defp display_specific_infos(conn, :quizz = type) do
-    render(conn, "quizz_infos.html", %{type: type})
+    render(conn, "quizz_infos.html", %{
+      type: type,
+      questions: ["question_1", "question_2", "question_3"]
+      })
   end
 
   defp display_specific_infos(conn, :associer = type) do

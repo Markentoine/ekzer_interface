@@ -23,12 +23,14 @@ defmodule EkzerInterfaceWeb.Router do
   scope "/add/new_exercise", EkzerInterfaceWeb do
     pipe_through :browser
 
+    get  "/situation", ExerciseController, :exercise_type
     post "/situation", ExerciseController, :exercise_type
     post "/objectives", ExerciseController, :exercise_situation
     post "/keywords", ExerciseController, :exercise_objectives
     post "/consigne", ExerciseController, :exercise_keywords
     post "/specific_infos", ExerciseController, :exercise_consigne
-    post "/validation", ExerciceController, :validate_exercise
+    post "/validation_classer", ExerciseController, :validate_classer
+    post "/validation_quizz", ExerciseController, :validate_quizz
 
   end
 

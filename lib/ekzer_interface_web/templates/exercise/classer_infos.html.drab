@@ -4,7 +4,7 @@
 <input drab-keyup="changed_nb_col" drab_options="debounce(500)" type="text" name="nb_col" placeholder="Entrez un chiffre">
 <button drab-click="create_cols" id="choisir_nb_col" class="button">Choisir</button>
 
-<%= form_for @conn, Routes.exercise_path(@conn, :validate_exercise), fn f -> %>
+<%= form_for @conn, Routes.exercise_path(@conn, :validate_classer), fn f -> %>
 <%= for col <- @colonnes do %>
     <label for=<%= col %>><%= col %></label>
     <input type="text" name=<%= col %> placeholder="Séparez chaque entrée par un espace"></input>
