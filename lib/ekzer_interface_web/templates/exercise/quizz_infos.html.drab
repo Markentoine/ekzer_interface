@@ -1,11 +1,17 @@
 <h1>Exercice de type "<%= @type %>"</h1>
-<label for="nb_questions">Vous pouvez changer le nombre de questions:</label>
-<input drab-keyup="changed_nb_questions" drab_options="debounce(500)" type="text" name="nb_questions" placeholder="Entrez un chiffre">
-<button drab-click="create_questions" id="choisir_nb_questions" class="button">Choisir</button>
 <%= form_for @conn, Routes.exercise_path(@conn, :validate_quizz), fn f -> %>
-<%= for question <- @questions do %>
-    <label for=<%= question %>><%= question %></label>
-    <input type="text" name=<%= question %> placeholder="Rédigez la question"></input>
-<% end %>
-<%= submit "Valider les informations" %>
+    <label for=<%= "question_#{@question_nb}" %>><%= "QUESTION N° #{@question_nb}" %></label>
+    <input type="text" name=<%= "question_#{@question_nb}" %> placeholder="Rédigez la question"></input>
+    <label for=<%= "nb_answers"%>>Vous pouvez changer le nombre de réponses:</label>
+    <input drab-keyup="changed_nb_answers" drab_options="debounce(500)" type="text" name="nb_answers" placeholder="Entrez un chiffre">
+    <button drab-click="create_answers" id=<%= "nb_answers_question_#{@question_nb}"%> class="button">Choisir</button>
+    <%= for {:reponse, rep_nb} <- @answers do %>
+        <label for=<%="reponse_#{@question_nb}#{rep_nb}"%>><%= "Reponse n° #{rep_nb}" %></label>
+        <input type="text" name=<%="reponse_#{@question_nb}#{rep_nb}"%> placeholder="Rédigez la réponse"></input>
+        <select id=<%= "reponse_#{@question_nb}_#{rep_nb}_correct"%>>
+            <option value="false">Faux</option>
+            <option value="true">Vrai</option>
+        </select>
+    <% end %>
+<%= submit "Valider la question et passer à la suivante" %>
 <% end %>

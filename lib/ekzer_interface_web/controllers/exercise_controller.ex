@@ -93,9 +93,13 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   defp display_specific_infos(conn, :quizz = type) do
+    exercise_pid = get_session(conn, :current_exercise)
+    {:ok, questions} = EkzerAdd.get_exercise_value(exercise_pid, :specific_fields)
+    question_nb = Enum.count(questions.questions) + 1
     render(conn, "quizz_infos.html", %{
       type: type,
-      questions: ["question_1", "question_2", "question_3"]
+      question_nb: question_nb,
+      answers: [{:reponse, 1}, {:reponse, 2}, {:reponse, 3}]
       })
   end
 

@@ -19,8 +19,19 @@ defmodule EkzerInterfaceWeb.ExerciseCommander do
 
   defhandler create_questions(socket, sender) do
     nb_questions = String.to_integer(get_store(socket, :nb_questions))
-    questions = Enum.map(1..nb_questions, fn nb -> "question_#{nb}" end)
+    questions = Enum.map(1..nb_questions, fn nb -> {"question", nb} end)
     Drab.Live.poke(socket, questions: questions)
+  end
+
+  defhandler changed_nb_answers(socket, sender) do
+    nb_answers = sender["value"]
+    put_store(socket, :nb_answer, nb_answers)
+  end
+
+  defhandler create_answers(socket, sender) do
+    nb_answers = String.to_integer(get_store(socket, :nb_answer))
+    answers = Enum.map(1..nb_answers, fn nb -> {:reponse, nb} end)
+    Drab.Live.poke(socket, answers: answers)
   end
 
 end
