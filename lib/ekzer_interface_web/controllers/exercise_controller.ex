@@ -64,19 +64,30 @@ defmodule EkzerInterfaceWeb.ExerciseController do
 
   def validate_classer(conn, params) do
     exercise_pid = get_session(conn, :current_exercise)
-    {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
-
+    
     cols =
-      Enum.filter(Map.keys(params), fn p -> Regex.match?(~r/colonne/, p) end)
-      |> Enum.reduce(%{}, fn col, acc -> Map.put(acc, col, String.split(params[col])) end)
-
-    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, type, cols)
+    Map.keys(params)
+    |> Enum.filter(fn p -> Regex.match?(~r/colonne/, p) end)
+    |> Enum.reduce(%{}, fn col, acc -> 
+      Map.put(acc, col, String.split(params[col])) 
+    end)
+    
+    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :classer, cols)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
   
-  def validate_quizz(conn, _params ) do
-    render(conn, "validate_exercise.html", exercise: %{})
+  def validate_quizz(conn, params) do
+    exercise_pid = get_session(conn, :current_exercise)
+    params_keys = Map.keys(params)
+    question_nb = find_question_nb(params_keys)
+    question = params[find_question_key(params_keys)]
+    answers = get_answers(params_keys, params)
+    quizz_entry = %{question: question, nb: question_nb, answers: answers}
+    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :quizz, quizz_entry)
+    {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
+    IO.inspect exercise
+    display_specific_infos(conn, :quizz)
   end
 
   def error_basic_infos(conn, type) do
@@ -121,6 +132,31 @@ defmodule EkzerInterfaceWeb.ExerciseController do
 
   defp field_in_list(field) do
     field in ["grammaire", "vocabulaire", "orthographe", "conjugaison"]
+  end
+
+  defp find_question_key(keys) do
+    keys
+      |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
+      |> hd
+  end
+
+  defp find_question_nb(keys) do
+    keys
+      |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
+      |> hd
+      |> String.split("_")
+      |> tl
+      |> hd
+      |> String.to_integer
+  end
+
+  def get_answers(keys, params) do
+    keys
+    |> Enum.filter(fn p -> Regex.match?(~r/answer_/, p) end)
+    |> Enum.map(fn ans -> 
+      nb = String.split(ans, "_") |> Enum.reverse |> hd
+      %{answer: params[ans], correct: params["correct_#{nb}"] |> String.to_atom } 
+    end)
   end
 
   defp is_number?(v) do
