@@ -17,6 +17,7 @@ defmodule EkzerInterfaceWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/add/new_exercise/type", PageController, :new
     post "/add/new_exercise/type", PageController, :add
   end
 

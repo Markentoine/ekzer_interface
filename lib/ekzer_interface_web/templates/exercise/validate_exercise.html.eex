@@ -16,3 +16,6 @@
                     </ul>
     </li>
 </ul>
+<%= form_tag("/add/new_exercise/type") do
+ [tag(:input, type: "submit", method: "GET", value: "NOUVEL EXERCICE" )]
+ end %>

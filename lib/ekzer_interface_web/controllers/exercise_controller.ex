@@ -19,8 +19,8 @@ defmodule EkzerInterfaceWeb.ExerciseController do
       correct_basic_infos?(level, progression, field) ->
         conn
         |> register_infos(%{ "level" => String.to_integer(level),
-                            "progression" => String.to_integer(progression),
-                            "field" => field,
+                             "progression" => String.to_integer(progression),
+                             "field" => field,
                           })
         |> render("objectives.html")
         true ->
@@ -49,21 +49,25 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   def specific_infos(conn, _params) do
-    exercise_pid = get_session(conn, :current_exercise)
-    {:ok, type} = EkzerAdd.get_exercise_value(exercise_pid, :type)
+    {:ok, type} = EkzerAdd.get_exercise_value(get_pid(conn), :type)
     display_specific_infos(conn, type)
   end
 
   def summary(conn, _params) do
-    _pids =
-      get_session(conn, :adder_pid)
-      |> EkzerAdd.fetch_exercises_pids()
-
-    render(conn, "summary.html")
+    pids =
+      conn
+      |> get_session(:adder_pid)
+      |> EkzerAdd.fetch_exercises_pids
+    states = Enum.map(pids, fn pid -> 
+              {:ok, state} = EkzerAdd.get_state(pid)
+              state
+             end)
+    IO.inspect states
+    render(conn, "summary.html", states: states)
   end
 
   def validate_classer(conn, params) do
-    exercise_pid = get_session(conn, :current_exercise)
+    exercise_pid = get_pid(conn)
     
     cols =
     Map.keys(params)
@@ -78,16 +82,14 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
   
   def validate_quizz(conn, params) do
-    exercise_pid = get_session(conn, :current_exercise)
-    params_keys = Map.keys(params)
-    question_nb = find_question_nb(params_keys)
-    question = params[find_question_key(params_keys)]
-    answers = get_answers(params_keys, params)
-    quizz_entry = %{question: question, nb: question_nb, answers: answers}
-    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :quizz, quizz_entry)
-    {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
-    IO.inspect exercise
+    register_question_quizz(conn, params)
     display_specific_infos(conn, :quizz)
+  end
+  
+  def validate_exercise(conn, params) do
+    {:ok, exercise} = get_pid(conn) |> EkzerAdd.get_state
+    IO.inspect exercise
+    render(conn, "validate_exercise.html", exercise: exercise)
   end
 
   def error_basic_infos(conn, type) do
@@ -95,6 +97,17 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   # PRIVATE
+  defp get_pid(conn), do: get_session(conn, :current_exercise)
+
+  defp register_question_quizz(conn, params) do
+    exercise_pid = get_session(conn, :current_exercise)
+    params_keys = Map.keys(params)
+    question_nb = find_question_nb(params_keys)
+    question = params[find_question_key(params_keys)]
+    answers = get_answers(params_keys, params)
+    quizz_entry = %{question: question, nb: question_nb, answers: answers}
+    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :quizz, quizz_entry)
+  end
 
   defp display_specific_infos(conn, :classer = type) do
     render(conn, "classer_infos.html", %{
@@ -110,7 +123,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "quizz_infos.html", %{
       type: type,
       question_nb: question_nb,
-      answers: [{:reponse, 1}, {:reponse, 2}, {:reponse, 3}]
+      answers: [1, 2, 3]
       })
   end
 
@@ -164,8 +177,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   defp register_infos(conn, infos) do
-    exercise_pid = get_session(conn, :current_exercise)
-    {:ok, :success} = EkzerAdd.add_common_infos(exercise_pid, infos)
+    {:ok, :success} = EkzerAdd.add_common_infos(get_pid(conn), infos)
     conn
   end
 

@@ -1,0 +1,11 @@
+<h1>Tous les exercices en cours</h1>
+</ul><%= for state <- @states do %>
+<li><%= state.type%>, 
+    <%= state.common_fields.field%>, 
+    niveau: <%= state.common_fields.level%>, 
+    progression: <%= state.common_fields.progression%></li>
+<% end %>
+</ul>
+<%= form_tag("/add/new_exercise/type") do
+ [tag(:input, type: "submit", method: "GET", value: "NOUVEL EXERCICE" )]
+ end %>

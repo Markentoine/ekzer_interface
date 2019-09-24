@@ -10,4 +10,8 @@ defmodule EkzerInterfaceWeb.PageController do
     conn = put_session(conn, :adder_pid, adder_pid)
     render(conn, "exercise_type.html")
   end
+
+  def new(conn, _params) do
+    render(conn, "exercise_type.html")
+  end
 end
