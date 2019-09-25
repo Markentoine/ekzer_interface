@@ -6,10 +6,7 @@
 <section class="row">
  <p>
  <%= form_tag("/add/new_exercise/type") do
- [tag(:input, type: "submit", value: "AJOUTER" )]
- end%>
- <%= form_tag("/find") do
- [tag(:input, type: "submit", value: "RECHERCHER")]
+ [tag(:input, type: "submit", value: "Nouvel Exercice" )]
  end%>
  </p>
 </section>

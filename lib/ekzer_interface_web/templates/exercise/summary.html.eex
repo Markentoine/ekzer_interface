@@ -1,4 +1,4 @@
-<h1>Tous les exercices en cours</h1>
+<h1>Exercices en cours</h1>
 </ul><%= for state <- @states do %>
     <li>
         <%= state.type%>, 

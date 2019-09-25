@@ -18,7 +18,7 @@ defmodule EkzerInterfaceWeb.Router do
 
     get "/", PageController, :index
     get "/add/new_exercise/type", PageController, :new
-    post "/add/new_exercise/type", PageController, :add
+    post "/add/new_exercise/type", PageController, :new
   end
 
   scope "/add/new_exercise", EkzerInterfaceWeb do
