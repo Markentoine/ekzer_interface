@@ -1,0 +1,13 @@
+<h1>Exercice de type "<%= @type %>"</h1>
+<%= form_for @conn, Routes.exercise_path(@conn, :validate_associer), fn f -> %>
+<label for="nb_prop">Indiquez le nombre final de propositions pour l'exercice</label>
+<input drab-keyup="change_nb_prop" drab_options="debounce(500)" type="text" name="nb_prop"></input>
+<button drab-click="create_prop" class="button" id="create_prop">Valider le nombre de propositions</button>
+<% end %>
+<%= for prop_nb <- @props do %>
+<label for=<%= "prop_#{prop_nb}"%>><%="Proposition n°#{prop_nb}"%></label>
+<input type="text" name=<%="prop_#{prop_nb}"%> placeholder="Rédiger la proposition"></input>
+<label for=<%= "predicat_#{prop_nb}"%>><%="Prédicat n°#{prop_nb}"%></label>
+<input type="text" name=<%="predicat_#{prop_nb}"%> placeholder="Rédiger le prédicat"></input>
+<% end %>
+<%= submit "Valider cet exercice" %>

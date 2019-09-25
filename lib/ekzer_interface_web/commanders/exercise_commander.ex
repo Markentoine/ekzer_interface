@@ -23,4 +23,15 @@ defmodule EkzerInterfaceWeb.ExerciseCommander do
     Drab.Live.poke(socket, answers: answers)
   end
 
+  defhandler change_nb_prop(socket, sender) do
+    nb_prop = sender["value"]
+    put_store(socket, :nb_prop, nb_prop)
+  end
+
+  defhandler create_prop(socket, sender) do
+    nb_prop = String.to_integer(get_store(socket, :nb_prop))
+    props = Enum.map(1..nb_prop, fn nb -> nb end)
+    Drab.Live.poke(socket, props: props)
+  end
+
 end

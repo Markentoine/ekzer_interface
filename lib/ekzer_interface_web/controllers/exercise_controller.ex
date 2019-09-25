@@ -87,6 +87,10 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     register_question_quizz(conn, params)
     display_specific_infos(conn, :quizz)
   end
+
+  def validate_associer(conn, params) do
+    render(conn, "validate_exercise.html", exercise: %{})
+  end
   
   def validate_exercise(conn, params) do
     {:ok, exercise} = get_pid(conn) |> EkzerAdd.get_state
@@ -130,7 +134,9 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   defp display_specific_infos(conn, :associer = type) do
-    render(conn, "associer_infos.html", %{type: type})
+    render(conn, "associer_infos.html", %{
+      type: type,
+      props: []})
   end
 
   defp display_specific_infos(conn, :prelever = type) do

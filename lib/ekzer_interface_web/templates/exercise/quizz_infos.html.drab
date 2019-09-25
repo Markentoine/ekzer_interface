@@ -5,7 +5,7 @@
 <%= form_for @conn, Routes.exercise_path(@conn, :validate_quizz), fn f -> %>
     <label for=<%= "question_#{@question_nb}" %>><%= "QUESTION N° #{@question_nb}" %></label>
     <input type="text" name=<%= "question_#{@question_nb}" %> placeholder="Rédigez la question"></input>
-    <label for=<%= "nb_ans"%>>Vous pouvez changer le nombre de réponses:</label>
+    <label for="nb_ans">Vous pouvez changer le nombre de réponses:</label>
     <input drab-keyup="changed_nb_answers" drab_options="debounce(500)" type="text" name="nb_ans" placeholder="Entrez un chiffre">
     <button drab-click="create_answers" id=<%= "nb_ans_question_#{@question_nb}"%> class="button">Valider le nombre de réponses possibles</button>
     <%= for ans_nb <- @answers do %>

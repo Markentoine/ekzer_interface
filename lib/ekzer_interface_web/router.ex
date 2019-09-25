@@ -32,6 +32,7 @@ defmodule EkzerInterfaceWeb.Router do
     post "/specific_infos", ExerciseController, :exercise_consigne
     post "/validation_classer", ExerciseController, :validate_classer
     post "/validation_quizz", ExerciseController, :validate_quizz
+    post "/validation_associer", ExerciseController, :validate_associer
 
   end
 
