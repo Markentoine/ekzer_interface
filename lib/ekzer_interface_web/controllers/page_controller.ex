@@ -6,8 +6,6 @@ defmodule EkzerInterfaceWeb.PageController do
       false -> 
         {:ok, adder_pid} = EkzerAdd.add()
         conn = put_session(conn, :adder_pid, adder_pid)
-        IO.puts "adder"
-        IO.inspect get_session(conn, :adder_pid)
         render(conn, "index.html")
       true -> 
         render(conn, "index.html")

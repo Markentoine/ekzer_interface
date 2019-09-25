@@ -125,7 +125,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "quizz_infos.html", %{
       type: type,
       question_nb: question_nb,
-      answers: [1, 2, 3]
+      answers: []
       })
   end
 
