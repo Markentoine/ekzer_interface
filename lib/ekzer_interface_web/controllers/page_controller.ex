@@ -17,6 +17,10 @@ defmodule EkzerInterfaceWeb.PageController do
     render(conn, "exercise_type.html")
   end
 
+  def referentiel(conn, params) do
+    render(conn, "referentiel.html")
+  end
+
   # PRIVATE
 
   defp adder_alive?(conn) do

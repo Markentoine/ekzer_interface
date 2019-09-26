@@ -10,12 +10,19 @@
   <body>
     <header>
       <h1>EKZER</h1>
-      <p>
-      <%= form_tag("/add/summary") do 
+      <nav>
+       <div id="summary">
+      <%= form_tag("/summary") do 
         [tag(:input, type: "submit", value: "Exercices en cours", class: "button button-outline")]
       end
       %>
-      </p>
+      </div>
+      <div id="referentiel">
+      <%= form_tag("/referentiel") do
+        [tag(:input, type: "submit", value: "Utiliser un référentiel", class: "button button-outline")]
+      end %>
+      </div>
+      </nav>
     </header>
     <main role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

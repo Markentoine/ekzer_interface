@@ -19,6 +19,8 @@ defmodule EkzerInterfaceWeb.Router do
     get "/", PageController, :index
     get "/add/new_exercise/type", PageController, :new
     post "/add/new_exercise/type", PageController, :new
+    post "referentiel", PageController, :referentiel
+    post "summary", ExerciseController, :summary
   end
 
   scope "/add/new_exercise", EkzerInterfaceWeb do
@@ -41,7 +43,6 @@ defmodule EkzerInterfaceWeb.Router do
     pipe_through :browser
 
     get "/error_basic_infos", ExerciseController, :error_basic_infos
-    post "/summary", ExerciseController, :summary
     post "/specific_infos", ExerciseController, :specific_infos
     post "/validate_exercise", ExerciseController, :validate_exercise
   end
