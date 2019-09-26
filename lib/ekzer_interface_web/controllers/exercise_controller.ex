@@ -10,7 +10,9 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   def exercise_type(conn, %{}) do
-    {:ok, type} = EkzerAdd.get_exercise_value(get_session(conn, :current_exercise), :type)
+    {:ok, type} = conn 
+                  |> get_session(:current_exercise) 
+                  |> EkzerAdd.get_exercise_value(:type)
     render(conn, "exercise_situation.html", type: type)
   end
 
@@ -51,7 +53,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   def specific_infos(conn, _params) do
-    {:ok, type} = EkzerAdd.get_exercise_value(get_pid(conn), :type)
+    {:ok, type} = get_pid(conn) |> EkzerAdd.get_exercise_value(:type)
     display_specific_infos(conn, type)
   end
 
