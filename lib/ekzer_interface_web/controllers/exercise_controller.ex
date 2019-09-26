@@ -69,8 +69,6 @@ defmodule EkzerInterfaceWeb.ExerciseController do
         {:ok, state} = EkzerAdd.get_state(pid)
         state
       end)
-
-    IO.inspect(states)
     render(conn, "summary.html", states: states)
   end
 
@@ -115,6 +113,26 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     prelevements = params["prelevements"] |> String.split("/")
     infos = %{texte: text, prelevements: prelevements}
     {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :prelever, infos)
+    {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
+    render(conn, "validate_exercise.html", exercise: exercise)
+  end
+  
+  def validate_completer(conn, params) do
+    exercise_pid = get_pid(conn)
+    text = params["text"]
+    partiels = text 
+    |> String.split("/") 
+    |> Enum.with_index
+    |> Enum.map(fn {el, idx} ->
+      case Regex.match?(~r/#/, el) do
+        true -> 
+          [partiel, correction] = String.split(el, "#")
+          %{partiel: partiel, position: idx, to_correct: true, correction: correction}
+        false ->
+            %{partiel: el, position: idx, to_correct: false, correction: nil}
+      end
+    end)
+    EkzerAdd.add_specific_infos(exercise_pid, :completer, partiels)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     IO.inspect exercise
     render(conn, "validate_exercise.html", exercise: exercise)

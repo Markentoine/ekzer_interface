@@ -1,1 +1,6 @@
 <h1>Exercice de type <%= @type %></h1>
+<%= form_for @conn, Routes.exercise_path(@conn, :validate_completer), fn f -> %>
+    <label for="text">Texte à compléter</label>
+    <input type="text" name="text" placeholder="Chaque partie à compléter doit être entre deux /. La correction doit être séparée par #">
+    <%= submit "Valider l'exercice"%>
+<% end %>
