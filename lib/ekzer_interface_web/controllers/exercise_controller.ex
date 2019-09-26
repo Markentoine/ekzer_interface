@@ -59,10 +59,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     pids =
       conn
       |> get_session(:adder_pid)
-      |> IO.inspect()
       |> EkzerAdd.fetch_exercises_pids()
-
-    IO.inspect(pids)
 
     states =
       Enum.map(pids, fn pid ->
