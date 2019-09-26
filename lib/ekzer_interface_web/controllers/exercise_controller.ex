@@ -69,6 +69,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
         {:ok, state} = EkzerAdd.get_state(pid)
         state
       end)
+
     render(conn, "summary.html", states: states)
   end
 
@@ -106,7 +107,7 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
-  
+
   def validate_prelever(conn, params) do
     exercise_pid = get_pid(conn)
     text = params["text"]
@@ -116,32 +117,38 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
-  
+
   def validate_completer(conn, params) do
     exercise_pid = get_pid(conn)
     text = params["text"]
-    partiels = text 
-    |> String.split("/") 
-    |> Enum.with_index
-    |> Enum.map(fn {el, idx} ->
-      case Regex.match?(~r/#/, el) do
-        true -> 
-          [partiel, correction] = String.split(el, "#")
-          %{partiel: partiel, position: idx, to_correct: true, correction: correction}
-        false ->
+
+    partiels =
+      text
+      |> String.split("/")
+      |> Enum.with_index()
+      |> Enum.map(fn {el, idx} ->
+        case Regex.match?(~r/#/, el) do
+          true ->
+            [partiel, correction] = String.split(el, "#")
+            %{partiel: partiel, position: idx, to_correct: true, correction: correction}
+
+          false ->
             %{partiel: el, position: idx, to_correct: false, correction: nil}
-      end
-    end)
+        end
+      end)
+
     EkzerAdd.add_specific_infos(exercise_pid, :completer, partiels)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
-    IO.inspect exercise
+    IO.inspect(exercise)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
 
   def validate_exercise(conn, params) do
-    {:ok, exercise} = conn 
-                      |> get_pid 
-                      |> EkzerAdd.get_state()
+    {:ok, exercise} =
+      conn
+      |> get_pid
+      |> EkzerAdd.get_state()
+
     IO.inspect(exercise)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
