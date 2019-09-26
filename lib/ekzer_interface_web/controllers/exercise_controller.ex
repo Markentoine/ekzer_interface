@@ -106,7 +106,17 @@ defmodule EkzerInterfaceWeb.ExerciseController do
 
     {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :associer, propositions)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
-    IO.inspect(exercise)
+    render(conn, "validate_exercise.html", exercise: exercise)
+  end
+  
+  def validate_prelever(conn, params) do
+    exercise_pid = get_pid(conn)
+    text = params["text"]
+    prelevements = params["prelevements"] |> String.split("/")
+    infos = %{texte: text, prelevements: prelevements}
+    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :prelever, infos)
+    {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
+    IO.inspect exercise
     render(conn, "validate_exercise.html", exercise: exercise)
   end
 

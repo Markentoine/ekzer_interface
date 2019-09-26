@@ -1,1 +1,9 @@
-<h1>Exercice de type <%= @type %></h1>
+<h1>Exercice de type "<%= @type %>"</h1>
+<%= form_for @conn, Routes.exercise_path(@conn, :validate_prelever), fn f -> %>
+    <label for="text">Texte source</label>
+    <input type="text" name="text" placeholder="Placez le texte source ici">
+
+    <label for="prelevements">Mots ou expressions à prélever</label>
+    <input type="text" name="prelevements" placeholder="Séparez chaque mot à prélever par un /">
+    <%= submit "Valider l'exercice"%>
+<% end %>

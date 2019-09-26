@@ -7,14 +7,6 @@
     <li>Consigne: <%= @exercise.common_fields.consigne %></li>
     <li>Objectifs: <%= Enum.join(@exercise.common_fields.objectives, " ; ") %></li>
     <li>Mots-Clefs: <%= Enum.join(@exercise.common_fields.keywords, " ; ") %></li>
-    <li>Spécificité: <ul>
-                    <%= for {f, val} <- @exercise.specific_fields do %>
-                        <%= for {k, v} <- val do %>
-                            <li><%= k <> " : " <> Enum.join(v, " ; ") %></li>
-                        <% end %>
-                    <% end %>
-                    </ul>
-    </li>
 </ul>
 <form action="/add/new_exercise/type" method="GET">
     <input type="submit" value="Nouvel Exercice">
