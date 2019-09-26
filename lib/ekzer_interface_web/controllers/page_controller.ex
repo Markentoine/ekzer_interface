@@ -3,11 +3,12 @@ defmodule EkzerInterfaceWeb.PageController do
 
   def index(conn, _params) do
     case check_adder_alive(conn) do
-      false -> 
+      false ->
         {:ok, adder_pid} = EkzerAdd.add()
         conn = put_session(conn, :adder_pid, adder_pid)
         render(conn, "index.html")
-      true -> 
+
+      true ->
         render(conn, "index.html")
     end
   end
@@ -21,6 +22,6 @@ defmodule EkzerInterfaceWeb.PageController do
   defp check_adder_alive(conn) do
     conn
     |> get_session(:adder_pid)
-    |> Process.alive?
+    |> Process.alive?()
   end
 end

@@ -14,37 +14,39 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     render(conn, "exercise_situation.html", type: type)
   end
 
-  def exercise_situation(conn, %{ "level" => level, "progression" => progression, "field" => field}) do
+  def exercise_situation(conn, %{"level" => level, "progression" => progression, "field" => field}) do
     cond do
       correct_basic_infos?(level, progression, field) ->
         conn
-        |> register_infos(%{ "level" => String.to_integer(level),
-                             "progression" => String.to_integer(progression),
-                             "field" => field,
-                          })
+        |> register_infos(%{
+          "level" => String.to_integer(level),
+          "progression" => String.to_integer(progression),
+          "field" => field
+        })
         |> render("objectives.html")
-        true ->
-          conn
-          |> put_flash(:error, "Certaines informations sont erronées ou manquantes.")
-          |> redirect(to: "/add/new_exercise/situation")
+
+      true ->
+        conn
+        |> put_flash(:error, "Certaines informations sont erronées ou manquantes.")
+        |> redirect(to: "/add/new_exercise/situation")
     end
   end
-      
+
   def exercise_objectives(conn, %{"objectives" => objectives}) do
     conn
-    |> register_infos(%{ "objectives" => [objectives]})
+    |> register_infos(%{"objectives" => [objectives]})
     |> render("keywords.html")
   end
 
   def exercise_keywords(conn, %{"keywords" => keywords}) do
     conn
-    |> register_infos(%{ "keywords" => String.split(keywords)})
+    |> register_infos(%{"keywords" => String.split(keywords)})
     |> render("consigne.html")
   end
 
   def exercise_consigne(conn, %{"consigne" => consigne} = _params) do
     conn
-    |> register_infos(%{ "consigne" => consigne})
+    |> register_infos(%{"consigne" => consigne})
     |> specific_infos(_params)
   end
 
@@ -57,32 +59,36 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     pids =
       conn
       |> get_session(:adder_pid)
-      |> IO.inspect
-      |> EkzerAdd.fetch_exercises_pids
-    IO.inspect pids
-    states = Enum.map(pids, fn pid -> 
-              {:ok, state} = EkzerAdd.get_state(pid)
-              state
-             end)
-    IO.inspect states
+      |> IO.inspect()
+      |> EkzerAdd.fetch_exercises_pids()
+
+    IO.inspect(pids)
+
+    states =
+      Enum.map(pids, fn pid ->
+        {:ok, state} = EkzerAdd.get_state(pid)
+        state
+      end)
+
+    IO.inspect(states)
     render(conn, "summary.html", states: states)
   end
 
   def validate_classer(conn, params) do
     exercise_pid = get_pid(conn)
-    
+
     cols =
-    Map.keys(params)
-    |> Enum.filter(fn p -> Regex.match?(~r/colonne/, p) end)
-    |> Enum.reduce(%{}, fn col, acc -> 
-      Map.put(acc, col, String.split(params[col])) 
-    end)
-    
+      Map.keys(params)
+      |> Enum.filter(fn p -> Regex.match?(~r/colonne/, p) end)
+      |> Enum.reduce(%{}, fn col, acc ->
+        Map.put(acc, col, String.split(params[col]))
+      end)
+
     {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :classer, cols)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
-  
+
   def validate_quizz(conn, params) do
     register_question_quizz(conn, params)
     display_specific_infos(conn, :quizz)
@@ -91,19 +97,24 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   def validate_associer(conn, params) do
     exercise_pid = get_pid(conn)
     nb_prop = String.to_integer(params["nb_prop"])
-    propositions = Enum.map(1..nb_prop, &(&1))
-                   |> Enum.map(&(%{proposition: params["proposition_#{&1}"],
-                                   predicat: params["predicat_#{&1}"]}))
+
+    propositions =
+      Enum.map(1..nb_prop, & &1)
+      |> Enum.map(
+        &%{proposition: params["proposition_#{&1}"], predicat: params["predicat_#{&1}"]}
+      )
 
     {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :associer, propositions)
     {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
-    IO.inspect exercise
+    IO.inspect(exercise)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
-  
+
   def validate_exercise(conn, params) do
-    {:ok, exercise} = get_pid(conn) |> EkzerAdd.get_state
-    IO.inspect exercise
+    {:ok, exercise} = conn 
+                      |> get_pid 
+                      |> EkzerAdd.get_state()
+    IO.inspect(exercise)
     render(conn, "validate_exercise.html", exercise: exercise)
   end
 
@@ -135,17 +146,16 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     exercise_pid = get_session(conn, :current_exercise)
     {:ok, questions} = EkzerAdd.get_exercise_value(exercise_pid, :specific_fields)
     question_nb = Enum.count(questions.questions) + 1
+
     render(conn, "quizz_infos.html", %{
       type: type,
       question_nb: question_nb,
       answers: []
-      })
+    })
   end
 
   defp display_specific_infos(conn, :associer = type) do
-    render(conn, "associer_infos.html", %{
-      type: type,
-      props: []})
+    render(conn, "associer_infos.html", %{type: type, props: []})
   end
 
   defp display_specific_infos(conn, :prelever = type) do
@@ -166,26 +176,26 @@ defmodule EkzerInterfaceWeb.ExerciseController do
 
   defp find_question_key(keys) do
     keys
-      |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
-      |> hd
+    |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
+    |> hd
   end
 
   defp find_question_nb(keys) do
     keys
-      |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
-      |> hd
-      |> String.split("_")
-      |> tl
-      |> hd
-      |> String.to_integer
+    |> Enum.filter(fn p -> Regex.match?(~r/question/, p) end)
+    |> hd
+    |> String.split("_")
+    |> tl
+    |> hd
+    |> String.to_integer()
   end
 
   def get_answers(keys, params) do
     keys
     |> Enum.filter(fn p -> Regex.match?(~r/answer_/, p) end)
-    |> Enum.map(fn ans -> 
-      nb = String.split(ans, "_") |> Enum.reverse |> hd
-      %{answer: params[ans], correct: params["correct_#{nb}"] |> String.to_atom } 
+    |> Enum.map(fn ans ->
+      nb = String.split(ans, "_") |> Enum.reverse() |> hd
+      %{answer: params[ans], correct: params["correct_#{nb}"] |> String.to_atom()}
     end)
   end
 
@@ -197,5 +207,4 @@ defmodule EkzerInterfaceWeb.ExerciseController do
     {:ok, :success} = EkzerAdd.add_common_infos(get_pid(conn), infos)
     conn
   end
-
 end

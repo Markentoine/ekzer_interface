@@ -33,5 +33,4 @@ defmodule EkzerInterfaceWeb.ExerciseCommander do
     props = Enum.map(1..nb_prop, fn nb -> nb end)
     Drab.Live.poke(socket, props: props)
   end
-
 end
