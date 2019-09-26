@@ -89,7 +89,16 @@ defmodule EkzerInterfaceWeb.ExerciseController do
   end
 
   def validate_associer(conn, params) do
-    render(conn, "validate_exercise.html", exercise: %{})
+    exercise_pid = get_pid(conn)
+    nb_prop = String.to_integer(params["nb_prop"])
+    propositions = Enum.map(1..nb_prop, &(&1))
+                   |> Enum.map(&(%{proposition: params["proposition_#{&1}"],
+                                   predicat: params["predicat_#{&1}"]}))
+
+    {:ok, :success} = EkzerAdd.add_specific_infos(exercise_pid, :associer, propositions)
+    {:ok, exercise} = EkzerAdd.get_state(exercise_pid)
+    IO.inspect exercise
+    render(conn, "validate_exercise.html", exercise: exercise)
   end
   
   def validate_exercise(conn, params) do
